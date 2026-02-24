@@ -20,6 +20,7 @@ const MyIssues = () => {
   return (
     <>
       <h2>My Issues</h2>
+      <p className="muted">Track all submitted issues and their current status.</p>
 
       <Card>
         <table className="data-table">
@@ -29,6 +30,7 @@ const MyIssues = () => {
               <th>Category</th>
               <th>Location</th>
               <th>Description</th>
+              <th>Image</th>
               <th>Status</th>
             </tr>
           </thead>
@@ -36,7 +38,7 @@ const MyIssues = () => {
           <tbody>
             {issues.length === 0 ? (
               <tr>
-                <td colSpan="4" style={{ textAlign: "center" }}>
+                <td colSpan="5" style={{ textAlign: "center" }}>
                   No issues reported yet
                 </td>
               </tr>
@@ -46,8 +48,13 @@ const MyIssues = () => {
                   <td>{i.category}</td>
                   <td>{i.location}</td>
                   <td>{i.description}</td>
+                  <td>{i.attachmentName || "-"}</td>
                   <td>
-                    <span className="status pending">
+                    <span
+                      className={`status ${String(i.status)
+                        .toLowerCase()
+                        .replace(/\s+/g, "-")}`}
+                    >
                       {i.status}
                     </span>
                   </td>

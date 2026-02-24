@@ -1,40 +1,50 @@
-
-import { useState } from "react";
-import { submitIssue } from "../../services/IssueService";
+import { useContext, useRef, useState } from "react";
 import Card from "../common/Card";
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
+import { submitIssue } from "../../services/IssueService";
 import { addNotification } from "../../services/NotificationService";
+
 const ReportIssue = () => {
   const { user } = useContext(AuthContext);
   const [category, setCategory] = useState("");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
+  const [attachmentName, setAttachmentName] = useState("");
   const [msg, setMsg] = useState("");
+  const fileInputRef = useRef(null);
 
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  const issue = {
-    category,
-    location,
-    description,
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    setAttachmentName(file?.name || "");
   };
 
-  await submitIssue(issue, user.email); // 👈 pass email
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  setMsg("Issue Submitted Successfully ✅");
+    const issue = {
+      category,
+      location,
+      description,
+      attachmentName: attachmentName || "",
+    };
 
-  setCategory("");
-  setLocation("");
-  setDescription("");
-  addNotification("New issue reported successfully");
-  
-};
+    await submitIssue(issue, user.email);
+
+    setMsg("Issue submitted successfully.");
+    setCategory("");
+    setLocation("");
+    setDescription("");
+    setAttachmentName("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    addNotification("New issue reported successfully");
+  };
 
   return (
     <Card>
       <h2>Report an Issue</h2>
+      <p className="muted">Submit civic issues and add a photo if available.</p>
 
       {msg && <p className="success">{msg}</p>}
 
@@ -61,6 +71,20 @@ const ReportIssue = () => {
           onChange={(e) => setDescription(e.target.value)}
           required
         />
+
+        <div className="upload-field">
+          <label htmlFor="issue-image">Add image (optional)</label>
+          <input
+            id="issue-image"
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+          />
+          <small>
+            {attachmentName ? `Selected: ${attachmentName}` : "No file selected"}
+          </small>
+        </div>
 
         <button type="submit">Submit</button>
       </form>
