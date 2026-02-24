@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+:root {
+  --bg-main: #f5f7fb;
+  --bg-card: #ffffff;
+  --primary: #4f46e5;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border-light: #e5e7eb;
+}
