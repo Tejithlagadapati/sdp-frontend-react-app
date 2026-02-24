@@ -1,5 +1,6 @@
-const Card = ({ children }) => {
-  return <div className="card">{children}</div>;
+const Card = ({ children, className = "" }) => {
+  const classes = ["card", className].filter(Boolean).join(" ");
+  return <div className={classes}>{children}</div>;
 };
 
 export default Card;

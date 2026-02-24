@@ -20,12 +20,13 @@ const Topbar = () => {
   return (
     <header className="topbar">
       <input
+        className="top-search"
         type="text"
         placeholder="Search services, infrastructure..."
       />
 
       <div className="top-actions">
-        <span className="profile">{profileLabel}</span>
+        <span className="profile-pill">{profileLabel}</span>
 
         <button className="logout-btn" onClick={handleLogout}>
           Logout
