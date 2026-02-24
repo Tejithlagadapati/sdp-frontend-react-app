@@ -18,29 +18,35 @@ const TrendingDetails = () => {
   if (!item) return <p>Not Found</p>;
 
   return (
-    <div className="trending-details">
+    <div
+      className="trending-details-page"
+      style={{ "--details-bg-image": `url(${item.image})` }}
+    >
+      <div className="trending-details-bg"></div>
+      <div className="trending-details">
 
-  <img src={item.image} alt={item.title} />
+        <img src={item.image} alt={item.title} />
 
-  <h1>{item.title}</h1>
+        <h1>{item.title}</h1>
 
-  <div className="details-info">
+        <div className="details-info">
 
-    <p><b>Category:</b> {item.category}</p>
-    <p><b>Location:</b> {item.location}</p>
-    <p><b>Date:</b> {item.date}</p>
+          <p><b>Category:</b> {item.category}</p>
+          <p><b>Location:</b> {item.location}</p>
+          <p><b>Date:</b> {item.date}</p>
 
-    <p style={{ marginTop: "10px" }}>
-      {item.description}
-    </p>
+          <p style={{ marginTop: "10px" }}>
+            {item.description}
+          </p>
 
-  </div>
+        </div>
 
-  <button className="book-btn">
-    Book / Register
-  </button>
+        <button className="book-btn">
+          Book / Register
+        </button>
 
-</div>
+      </div>
+    </div>
   );
 };
 
