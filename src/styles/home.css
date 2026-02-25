@@ -5,7 +5,7 @@
   overflow-x: hidden;
   font-family: "Segoe UI", Arial, sans-serif;
   color: #111827;
-  background: #cc0808;
+  background: #f8fafc;
 
 
 }
@@ -304,6 +304,42 @@ section,
     padding: 50px 5%;
   }
 
+}
+
+body.theme-dark .home {
+  color: #e2e8f0;
+  background: #0b1220;
+}
+
+body.theme-dark .features-section,
+body.theme-dark .why-section {
+  background: #0f172a;
+}
+
+body.theme-dark .steps-section {
+  background: #111c30;
+}
+
+body.theme-dark .feature-card,
+body.theme-dark .step-box {
+  background: #1e293b;
+  color: #e2e8f0;
+  box-shadow: 0 10px 18px rgba(2, 6, 23, 0.35);
+}
+
+body.theme-dark .why-section li {
+  border-bottom-color: #334155;
+}
+
+body.theme-dark .footer {
+  background: #020617;
+}
+
+body.theme-dark .footer p,
+body.theme-dark .footer li,
+body.theme-dark .footer a,
+body.theme-dark .footer-bottom {
+  color: #94a3b8;
 }
 
 @media (max-width: 480px) {

@@ -26,7 +26,34 @@ const AppRoutes = () => {
         path="/admin"
         element={
           <ProtectedRoute role="ADMIN">
-            <AdminPage />
+            <AdminPage page="overview" />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/city-management"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AdminPage page="city-management" />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/citizen-reports"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AdminPage page="citizen-reports" />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/system-settings"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AdminPage page="system-settings" />
           </ProtectedRoute>
         }
       />
@@ -69,6 +96,15 @@ const AppRoutes = () => {
         }
       />
 
+      <Route
+        path="/user/trending"
+        element={
+          <ProtectedRoute role="USER">
+            <UserPage page="trending" />
+          </ProtectedRoute>
+        }
+      />
+
       {/* Trending (Public) */}
       <Route path="/trending" element={<TrendingPage />} />
       <Route path="/trending/:id" element={<TrendingDetails />} />
@@ -80,9 +116,15 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/user/bookings"
+        element={
+          <ProtectedRoute role="USER">
+            <UserPage page="bookings" />
+          </ProtectedRoute>
+        }
+      />
 
-      {/* Fallback (ALWAYS LAST) */}
-      <Route path="*" element={<Navigate to="/" />} />
       <Route
         path="/user/notifications"
         element={
@@ -91,6 +133,8 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      {/* Fallback (ALWAYS LAST) */}
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

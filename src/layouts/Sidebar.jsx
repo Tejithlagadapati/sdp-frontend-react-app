@@ -1,13 +1,17 @@
+import { NavLink } from "react-router-dom";
+
 const Sidebar = () => {
   return (
     <aside className="sidebar">
-      <h2 className="logo">CityOS</h2>
+      <h2 className="logo">CitySphere</h2>
 
       <nav>
-        <a className="active">Dashboard</a>
-        <a>City Management</a>
-        <a>Infrastructure</a>
-        <a>Reports</a>
+        <NavLink to="/admin" end>
+          Admin Overview
+        </NavLink>
+        <NavLink to="/admin/city-management">City Management</NavLink>
+        <NavLink to="/admin/citizen-reports">Citizen Reports</NavLink>
+        <NavLink to="/admin/system-settings">System Settings</NavLink>
       </nav>
     </aside>
   );

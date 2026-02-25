@@ -368,3 +368,47 @@
   }
 
 }
+
+body.theme-dark .user-home {
+  color: #e2e8f0;
+}
+
+body.theme-dark .user-home section,
+body.theme-dark .service-card,
+body.theme-dark .step,
+body.theme-dark .updates-box,
+body.theme-dark .notify-box,
+body.theme-dark .rating-box,
+body.theme-dark .community-box {
+  background: rgba(15, 23, 42, 0.78);
+  border-color: rgba(148, 163, 184, 0.25);
+  box-shadow: 0 14px 24px rgba(2, 6, 23, 0.4);
+  color: #e2e8f0;
+}
+
+body.theme-dark .blue,
+body.theme-dark .green,
+body.theme-dark .yellow,
+body.theme-dark .red,
+body.theme-dark .orange,
+body.theme-dark .purple {
+  background: rgba(30, 41, 59, 0.92);
+}
+
+body.theme-dark .section-header a {
+  color: #a5b4fc;
+}
+
+body.theme-dark .update-item {
+  border-bottom-color: #334155;
+}
+
+body.theme-dark .rating-box button {
+  border-color: #818cf8;
+  color: #a5b4fc;
+}
+
+body.theme-dark .rating-box button:hover {
+  background: #6366f1;
+  color: #ffffff;
+}

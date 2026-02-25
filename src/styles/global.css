@@ -3,6 +3,7 @@ body {
   font-family: "Inter", sans-serif;
   background: var(--bg-main);
   color: var(--text-main);
+  transition: background-color 220ms ease, color 220ms ease;
 }
 
 :root {
@@ -12,6 +13,10 @@ body {
   --text-main: #111827;
   --text-muted: #6b7280;
   --border-light: #e5e7eb;
+  --surface-1: #ffffff;
+  --surface-2: #f8fafc;
+  --surface-3: #eef2ff;
+  --shadow-soft: 0 12px 24px rgba(15, 23, 42, 0.08);
 }
 html, body {
   margin: 0;
@@ -19,6 +24,40 @@ html, body {
   overflow-x: hidden;
 }
 
+body.theme-dark {
+  --bg-main: #0b1220;
+  --bg-card: #111827;
+  --primary: #6366f1;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --border-light: #334155;
+  --surface-1: #0f172a;
+  --surface-2: #111c30;
+  --surface-3: #1e293b;
+  --shadow-soft: 0 14px 28px rgba(2, 6, 23, 0.55);
+}
+
 * {
   box-sizing: border-box;
+}
+
+.theme-toggle-btn {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 1000;
+  min-width: 88px;
+  border: 1px solid var(--border-light);
+  background: var(--surface-1);
+  color: var(--text-main);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: transform 180ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-1px);
 }

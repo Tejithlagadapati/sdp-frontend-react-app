@@ -73,7 +73,7 @@ const ReportIssue = () => {
         />
 
         <div className="upload-field">
-          <label htmlFor="issue-image">Add image (optional)</label>
+          <label htmlFor="issue-image">Add image (Optional but Recommended)</label>
           <input
             id="issue-image"
             type="file"

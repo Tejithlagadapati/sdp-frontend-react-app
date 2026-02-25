@@ -1,23 +1,17 @@
 import AdminLayout from "../layouts/AdminLayout";
+import AdminOverview from "../components/admin/AdminOverview";
+import CityManagement from "../components/admin/CityManagement";
 import ViewIssues from "../components/admin/ViewIssues";
-import AdminAnalytics from "../components/admin/AdminAnalytics";
-import { getAllIssues } from "../services/IssueService";
-import { useEffect, useState } from "react";
-const AdminPage = () => {
-  const [issues, setIssues] = useState([]);
+import SystemSettings from "../components/admin/SystemSettings";
 
-  useEffect(() => {
-    getAllIssues().then((data) => setIssues(data));
-  }, []);
+const AdminPage = ({ page = "overview" }) => {
   return (
-    
-    <>
-    <h2>Admin Dashboard</h2>
-    <AdminAnalytics issues={issues} />
     <AdminLayout>
-      <ViewIssues />
+      {page === "overview" && <AdminOverview />}
+      {page === "city-management" && <CityManagement />}
+      {page === "citizen-reports" && <ViewIssues />}
+      {page === "system-settings" && <SystemSettings />}
     </AdminLayout>
-  </>
   );
 };
 

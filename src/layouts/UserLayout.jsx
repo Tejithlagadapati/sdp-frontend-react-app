@@ -13,6 +13,7 @@ const UserLayout = ({ children, notifCount }) => {
           <NavLink to="/user/report">Report Issue</NavLink>
           <NavLink to="/user/issues">My Issues</NavLink>
           <NavLink to="/user/services">Services</NavLink>
+          <NavLink to="/user/bookings">My Bookings</NavLink>
           <NavLink to="/user/feedback">Feedback</NavLink>
 
           <NavLink to="/user/notifications">
@@ -20,7 +21,7 @@ const UserLayout = ({ children, notifCount }) => {
             {notifCount > 0 && <span className="notif-badge">{notifCount}</span>}
           </NavLink>
 
-          <NavLink to="/trending">Trending</NavLink>
+          <NavLink to="/user/trending">Trending</NavLink>
         </nav>
       </aside>
 

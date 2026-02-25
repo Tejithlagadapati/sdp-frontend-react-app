@@ -9,6 +9,8 @@ import Services from "../components/user/Services";
 import MyIssues from "../components/user/MyIssues";
 import Feedback from "../components/user/Feedback";
 import Notifications from "../components/user/Notifications";
+import MyBookings from "../components/user/MyBookings";
+import TrendingPage from "../components/trending/TrendingPage";
 
 const UserPage = ({ page }) => {
   const [notifCount, setNotifCount] = useState(0);
@@ -50,6 +52,8 @@ const UserPage = ({ page }) => {
       {page === "issues" && <MyIssues />}
       {page === "feedback" && <Feedback />}
       {page === "notifications" && <Notifications />}
+      {page === "bookings" && <MyBookings />}
+      {page === "trending" && <TrendingPage />}
     </UserLayout>
   );
 };

@@ -1,62 +1,89 @@
 import { Link } from "react-router-dom";
-import Slider from "./Slider";
-
 import { getAllTrending } from "../../services/TrendingService";
+
+const popularFilters = ["All", "Concerts", "Arts", "Outdoors", "Health", "Education"];
+
 const TrendingPage = () => {
   const data = getAllTrending();
 
-  const handlePointerMove = (event) => {
-    const card = event.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const relativeX = (event.clientX - rect.left) / rect.width;
-    const relativeY = (event.clientY - rect.top) / rect.height;
-
-    const rotateY = (relativeX - 0.5) * 18;
-    const rotateX = (0.5 - relativeY) * 16;
-
-    card.style.setProperty("--rx", `${rotateX.toFixed(2)}deg`);
-    card.style.setProperty("--ry", `${rotateY.toFixed(2)}deg`);
-    card.style.setProperty("--mx", `${(relativeX * 100).toFixed(2)}%`);
-    card.style.setProperty("--my", `${(relativeY * 100).toFixed(2)}%`);
-  };
-
-  const resetTilt = (event) => {
-    const card = event.currentTarget;
-    card.style.setProperty("--rx", "0deg");
-    card.style.setProperty("--ry", "0deg");
-    card.style.setProperty("--mx", "50%");
-    card.style.setProperty("--my", "50%");
-  };
-
   return (
-    <div className="trending-page">
-      <h2 className="trending-title">Trending in Your City</h2>
+    <section className="events-page">
+      <div className="events-heading-row">
+        <div>
+          <h1>Events & Services</h1>
+          <p>
+            Discover what&apos;s happening in your neighborhood and access
+            essential city resources.
+          </p>
+        </div>
 
-      {/* Slider */}
-      <Slider items={data} />
+        <div className="events-stats">
+          <article>
+            <strong>12</strong>
+            <span>NEW EVENTS</span>
+          </article>
+          <article>
+            <strong>48</strong>
+            <span>ACTIVE SERVICES</span>
+          </article>
+        </div>
+      </div>
 
-      {/* Cards */}
-      <div className="trending-grid">
-        {data.map((item, index) => (
-          <Link
-            to={`/trending/${item.id}`}
-            key={item.id}
-            className={`trending-card trending-card--${index % 3}`}
-            onMouseMove={handlePointerMove}
-            onMouseLeave={resetTilt}
+      <div className="events-toolbar">
+        <div className="events-tabs">
+          <button type="button" className="is-active">
+            Upcoming Events
+          </button>
+          <button type="button">Public Services</button>
+        </div>
+
+        <div className="events-actions">
+          <input type="text" placeholder="Search..." />
+          <button type="button">Filter</button>
+          <button type="button" className="date-filter-btn">
+            Date Filter
+          </button>
+        </div>
+      </div>
+
+      <div className="events-chips">
+        <span>POPULAR:</span>
+        {popularFilters.map((chip, index) => (
+          <button
+            key={chip}
+            type="button"
+            className={index === 0 ? "is-selected" : ""}
           >
-            <img src={item.image} alt={item.title} />
-            <div className="trending-card-overlay"></div>
-            <div className="trending-card-glow"></div>
-            <div className="trending-content">
-              <h3>{item.title}</h3>
-              <p>{item.category}</p>
-              <span className="trending-cta">Learn More</span>
-            </div>
-          </Link>
+            {chip}
+          </button>
         ))}
       </div>
-    </div>
+
+      <div className="events-cards-grid">
+        {data.map((item) => (
+          <article key={item.id} className="events-card">
+            <div className="events-card-image-wrap">
+              <img src={item.image} alt={item.title} />
+              <span>{item.tag}</span>
+            </div>
+
+            <div className="events-card-body">
+              <h3>{item.title}</h3>
+              <p className="events-meta">{item.date}</p>
+              <p className="events-meta">{item.time}</p>
+              <p className="events-meta">{item.location}</p>
+              <p className="events-description">{item.description}</p>
+              <p className="events-registered">{item.registered} registered</p>
+
+              <div className="events-card-actions">
+                <button type="button">RSVP Now</button>
+                <Link to={`/trending/${item.id}`}>Details</Link>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
   );
 };
 
