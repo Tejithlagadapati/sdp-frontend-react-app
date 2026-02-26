@@ -1,203 +1,174 @@
 import { useEffect, useMemo, useState } from "react";
+import {
+    Chart as ChartJS,
+    BarElement,
+    ArcElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Legend,
+} from "chart.js";
+import { Bar, Pie } from "react-chartjs-2";
 import { getAllServices } from "../../services/CityService";
 import { getAllIssues } from "../../services/IssueService";
 import Card from "../common/Card";
 
-const trendPoints = [420, 390, 510, 470, 620, 540, 590];
+ChartJS.register(BarElement, ArcElement, CategoryScale, LinearScale, Tooltip, Legend);
 
-const logsSeed = [
-    {
-        id: 1,
-        time: "10:42 AM",
-        event: 'Bridge sensor triggered "Structure Load" alert',
-        category: "Infrastructure",
-        status: "Warning",
-    },
-    {
-        id: 2,
-        time: "09:15 AM",
-        event: 'New amenity "Public Library" added to directory',
-        category: "Public Service",
-        status: "Success",
-    },
-    {
-        id: 3,
-        time: "Yesterday",
-        event: "Main power grid redundancy test completed",
-        category: "Utilities",
-        status: "Completed",
-    },
-    {
-        id: 4,
-        time: "Yesterday",
-        event: "Pothole report #8423 assigned to maintenance",
-        category: "Roads",
-        status: "Pending",
-    },
-    {
-        id: 5,
-        time: "May 28",
-        event: "Global system security patch deployed",
-        category: "Security",
-        status: "Success",
-    },
+const infrastructureSeed = [
+    { type: "Road", value: 2 },
+    { type: "Water Supply", value: 1 },
+    { type: "Electricity", value: 2 },
 ];
+
+const statusClass = (value) => {
+    const normalized = String(value).toLowerCase();
+    if (normalized === "pending") return "pending";
+    if (normalized === "resolved") return "resolved";
+    if (normalized === "in progress") return "in-progress";
+    return "in-progress";
+};
 
 const AdminOverview = () => {
     const [services, setServices] = useState([]);
     const [issues, setIssues] = useState([]);
 
     useEffect(() => {
-        const load = async () => {
-            const [serviceData, issueData] = await Promise.all([
-                getAllServices(),
-                getAllIssues(),
-            ]);
+        const loadData = async () => {
+            const [serviceData, issueData] = await Promise.all([getAllServices(), getAllIssues()]);
             setServices(serviceData);
             setIssues(issueData);
         };
 
-        load();
+        loadData();
     }, []);
 
-    const activeServices = useMemo(
-        () => services.filter((service) => service.status === "Active").length,
-        [services]
-    );
+    const serviceCategoryChart = useMemo(() => {
+        const counts = services.reduce((accumulator, service) => {
+            const key = service.category || "Other";
+            accumulator[key] = (accumulator[key] || 0) + 1;
+            return accumulator;
+        }, {});
 
-    const unresolvedIssues = useMemo(
-        () => issues.filter((issue) => issue.status !== "Resolved").length,
-        [issues]
-    );
+        return {
+            labels: Object.keys(counts),
+            datasets: [
+                {
+                    data: Object.values(counts),
+                    backgroundColor: ["#5f9dd3", "#68b3a6", "#6a67d8", "#e0a33a", "#7aa2f7"],
+                    borderRadius: 6,
+                },
+            ],
+        };
+    }, [services]);
 
-    const satisfaction = useMemo(() => {
+    const issueStatusChart = useMemo(() => {
+        const pending = issues.filter((issue) => issue.status === "Pending").length;
         const resolved = issues.filter((issue) => issue.status === "Resolved").length;
-        if (issues.length === 0) {
-            return "4.8/5";
-        }
-        const score = 3.6 + (resolved / issues.length) * 1.4;
-        return `${score.toFixed(1)}/5`;
+        const inProgress = Math.max(issues.length - pending - resolved, 0);
+
+        return {
+            labels: ["In Progress", "Pending", "Resolved"],
+            datasets: [
+                {
+                    data: [inProgress || 1, pending || 1, resolved || 1],
+                    backgroundColor: ["#5f9dd3", "#e0a33a", "#65b487"],
+                    borderWidth: 1,
+                },
+            ],
+        };
     }, [issues]);
 
-    const trendPath = useMemo(() => {
-        const width = 620;
-        const height = 180;
-        const min = Math.min(...trendPoints);
-        const max = Math.max(...trendPoints);
-        const xStep = width / (trendPoints.length - 1);
-
-        return trendPoints
-            .map((point, index) => {
-                const x = index * xStep;
-                const y = height - ((point - min) / (max - min || 1)) * height;
-                return `${index === 0 ? "M" : "L"}${x},${y}`;
-            })
-            .join(" ");
+    const infrastructureChart = useMemo(() => {
+        return {
+            labels: infrastructureSeed.map((item) => item.type),
+            datasets: [
+                {
+                    data: infrastructureSeed.map((item) => item.value),
+                    backgroundColor: ["#5f9dd3", "#68b3a6", "#6a67d8"],
+                },
+            ],
+        };
     }, []);
 
+    const cards = useMemo(() => {
+        const pending = issues.filter((issue) => issue.status === "Pending").length;
+        const resolved = issues.filter((issue) => issue.status === "Resolved").length;
+
+        return [
+            { label: "Total Services", value: services.length, note: "↑ 2 this month" },
+            { label: "Infrastructure", value: infrastructureSeed.length, note: "↑ 1 added" },
+            { label: "Amenities", value: Math.max(services.length - infrastructureSeed.length, 0), note: "City facilities" },
+            { label: "Pending Issues", value: pending, note: "Needs attention" },
+            { label: "In Progress", value: Math.max(issues.length - pending - resolved, 0), note: "Assigned tasks" },
+            { label: "Resolved Issues", value: resolved, note: "↑ 33% rate" },
+            { label: "Registered Users", value: 3, note: "Admin + users" },
+            { label: "Feedback Submissions", value: 2, note: "Recent responses" },
+        ];
+    }, [services, issues]);
+
     return (
-        <section className="admin-overview-wrap">
-            <div className="admin-overview-head">
-                <div>
-                    <h1>Admin Dashboard</h1>
-                    <p className="muted">Overview of city-wide services and infrastructure performance.</p>
-                </div>
-
-                <div className="admin-overview-actions">
-                    <button type="button" className="secondary-btn">Export Report</button>
-                    <button type="button" className="primary-btn">Switch to User Portal</button>
-                </div>
+        <section className="admin-page-wrap">
+            <div className="admin-stat-grid">
+                {cards.map((card) => (
+                    <Card key={card.label} className="admin-stat-card">
+                        <h3>{card.value}</h3>
+                        <p>{card.label}</p>
+                        <small>{card.note}</small>
+                    </Card>
+                ))}
             </div>
 
-            <div className="admin-kpi-grid">
-                <Card>
-                    <p className="muted">Public Services</p>
-                    <h3>{services.length}</h3>
-                    <small>{activeServices} active registered services</small>
-                </Card>
-
-                <Card>
-                    <p className="muted">System Uptime</p>
-                    <h3>99.92%</h3>
-                    <small>Real-time infrastructure health</small>
-                </Card>
-
-                <Card>
-                    <p className="muted">Citizen Reports</p>
-                    <h3>{issues.length}</h3>
-                    <small>{unresolvedIssues} unresolved urgent issues</small>
-                </Card>
-
-                <Card>
-                    <p className="muted">Satisfaction</p>
-                    <h3>{satisfaction}</h3>
-                    <small>Based on recent feedback</small>
-                </Card>
-            </div>
-
-            <div className="admin-overview-main-grid">
-                <Card className="admin-trend-card">
-                    <div className="admin-trend-head">
-                        <div>
-                            <h3>Service Request Trends</h3>
-                            <p className="muted">Daily volume of citizen reports and inquiries</p>
-                        </div>
-                        <span className="category-pill">Last 30 Days</span>
-                    </div>
-
-                    <div className="admin-trend-chart">
-                        <svg viewBox="0 0 620 180" preserveAspectRatio="none" role="img" aria-label="Trend line">
-                            <path d={trendPath} className="admin-trend-line" />
-                        </svg>
+            <div className="admin-chart-grid">
+                <Card className="admin-chart-card">
+                    <h3>📊 Services by Category</h3>
+                    <div className="admin-chart-body">
+                        <Bar data={serviceCategoryChart} options={{ responsive: true, plugins: { legend: { display: false } } }} />
                     </div>
                 </Card>
 
-                <Card className="admin-quick-card">
-                    <h3>Quick Command</h3>
-                    <p className="muted">Frequent admin tasks</p>
+                <Card className="admin-chart-card">
+                    <h3>🔵 Issue Status Distribution</h3>
+                    <div className="admin-chart-body">
+                        <Pie data={issueStatusChart} options={{ responsive: true }} />
+                    </div>
+                </Card>
 
-                    <button type="button" className="admin-quick-btn">Add New Service</button>
-                    <button type="button" className="admin-quick-btn admin-quick-btn-alert">
-                        Maintenance Alert
-                    </button>
-                    <button type="button" className="admin-quick-btn">System Audit</button>
-                    <button type="button" className="admin-quick-btn">User Feedback</button>
-
-                    <div className="admin-health-row">
-                        <span>System Health</span>
-                        <strong>Healthy</strong>
+                <Card className="admin-chart-card">
+                    <h3>🏗️ Infrastructure by Type</h3>
+                    <div className="admin-chart-body">
+                        <Bar
+                            data={infrastructureChart}
+                            options={{
+                                indexAxis: "y",
+                                responsive: true,
+                                plugins: { legend: { display: false } },
+                            }}
+                        />
                     </div>
                 </Card>
             </div>
 
-            <Card>
-                <div className="admin-log-head">
-                    <h3>Recent System Logs</h3>
-                    <button type="button" className="ghost-btn">View All History</button>
-                </div>
-
+            <Card className="admin-table-card">
+                <div className="admin-table-title">🚨 Recent Issue Reports</div>
                 <div className="city-table-wrap">
-                    <table className="data-table">
+                    <table className="data-table admin-data-table">
                         <thead>
                             <tr>
-                                <th>Timestamp</th>
-                                <th>Event Description</th>
+                                <th>Title</th>
                                 <th>Category</th>
+                                <th>Reported By</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {logsSeed.map((log) => (
-                                <tr key={log.id}>
-                                    <td>{log.time}</td>
-                                    <td>{log.event}</td>
+                            {issues.slice(0, 4).map((issue) => (
+                                <tr key={issue.id}>
+                                    <td>{issue.description}</td>
+                                    <td>{issue.category}</td>
+                                    <td>@{issue.userEmail?.split("@")[0] || "user"}</td>
                                     <td>
-                                        <span className="category-pill">{log.category}</span>
-                                    </td>
-                                    <td>
-                                        <span className={`status ${String(log.status).toLowerCase()}`}>
-                                            {log.status}
-                                        </span>
+                                        <span className={`status ${statusClass(issue.status)}`}>{issue.status}</span>
                                     </td>
                                 </tr>
                             ))}

@@ -1,13 +1,13 @@
 import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import AdminTopbar from "./AdminTopbar";
 
 const AdminLayout = ({ children }) => {
   return (
-    <div className="dashboard">
+    <div className="admin-shell">
       <Sidebar />
-      <div className="main">
-        <Topbar />
-        <div className="content">
+      <div className="admin-main">
+        <AdminTopbar />
+        <div className="admin-content">
           {children}
         </div>
       </div>

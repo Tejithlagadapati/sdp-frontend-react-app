@@ -28,7 +28,7 @@ const MyBookings = () => {
     <>
       <h2>My Bookings</h2>
       <p className="muted">
-        All your service worker appointments and trending event registrations.
+        All your trending event registrations.
       </p>
 
       <Card>

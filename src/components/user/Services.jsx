@@ -1,94 +1,49 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "../common/Card";
-import { AuthContext } from "../../context/AuthContext";
-import { addNotification } from "../../services/NotificationService";
-import { addWorkerBooking, getWorkerCatalog } from "../../services/BookingService";
-import { getPublicServices } from "../../services/CityService";
+import { getServicesByType } from "../../services/CityService";
 
 const Services = () => {
-  const { user } = useContext(AuthContext);
-  const catalog = getWorkerCatalog();
-
-  const [selectedCategory, setSelectedCategory] = useState(catalog[0]?.id || "");
-  const workersInCategory = useMemo(() => {
-    return catalog.find((category) => category.id === selectedCategory)?.workers || [];
-  }, [catalog, selectedCategory]);
-
-  const [selectedWorkerId, setSelectedWorkerId] = useState(
-    catalog[0]?.workers?.[0]?.id || ""
-  );
-
-  const [appointmentDate, setAppointmentDate] = useState("");
-  const [appointmentTime, setAppointmentTime] = useState("");
-  const [serviceAddress, setServiceAddress] = useState("");
-  const [note, setNote] = useState("");
-  const [message, setMessage] = useState("");
-  const [cityServices, setCityServices] = useState([]);
+  const [publicServices, setPublicServices] = useState([]);
+  const [infrastructure, setInfrastructure] = useState([]);
+  const [amenities, setAmenities] = useState([]);
 
   useEffect(() => {
-    const loadCityServices = async () => {
-      const data = await getPublicServices();
-      setCityServices(data);
+    let isMounted = true;
+
+    const loadData = async () => {
+      const [servicesData, infraData, amenitiesData] = await Promise.all([
+        getServicesByType("public-service", true),
+        getServicesByType("infrastructure", true),
+        getServicesByType("amenity", true),
+      ]);
+
+      if (!isMounted) return;
+
+      setPublicServices(servicesData);
+      setInfrastructure(infraData);
+      setAmenities(amenitiesData);
     };
 
-    loadCityServices();
+    loadData();
+    const timer = setInterval(loadData, 2500);
+
+    return () => {
+      isMounted = false;
+      clearInterval(timer);
+    };
   }, []);
-
-  const handleCategoryChange = (event) => {
-    const categoryId = event.target.value;
-    setSelectedCategory(categoryId);
-
-    const workers = catalog.find((item) => item.id === categoryId)?.workers || [];
-    setSelectedWorkerId(workers[0]?.id || "");
-  };
-
-  const handleBookAppointment = async (event) => {
-    event.preventDefault();
-
-    const category = catalog.find((item) => item.id === selectedCategory);
-    const selectedWorker = category?.workers.find((worker) => worker.id === selectedWorkerId);
-
-    if (!selectedWorker) {
-      setMessage("Please choose a worker before booking.");
-      return;
-    }
-
-    const workerWithCategory = {
-      ...selectedWorker,
-      categoryLabel: category.label,
-    };
-
-    await addWorkerBooking({
-      userEmail: user.email,
-      worker: workerWithCategory,
-      appointmentDate,
-      appointmentTime,
-      serviceAddress,
-      note,
-    });
-
-    addNotification(
-      `Appointment booked with ${selectedWorker.name} on ${appointmentDate} at ${appointmentTime}.`
-    );
-
-    setMessage(
-      `Booked with ${selectedWorker.name} for ${appointmentDate} at ${appointmentTime}.`
-    );
-    setNote("");
-    setServiceAddress("");
-  };
 
   return (
     <>
       <h2>City Services</h2>
-      <p className="muted">Explore important public services.</p>
+      <p className="muted">Explore public services, infrastructure, and amenities updated by admin.</p>
 
       <section className="stack-block">
-        <h3>Available City Services</h3>
+        <h3>Public Services</h3>
         <p className="muted">Services published by city administrators.</p>
 
         <div className="city-public-grid">
-          {cityServices.map((service) => (
+          {publicServices.map((service) => (
             <Card key={service.id} className="city-public-card">
               <div className="city-public-head">
                 <h4>{service.name}</h4>
@@ -97,11 +52,57 @@ const Services = () => {
               <p><strong>Category:</strong> {service.category}</p>
               <p><strong>Location:</strong> {service.location}</p>
               <p><strong>Contact:</strong> {service.contact}</p>
+              {service.description && <p><strong>Info:</strong> {service.description}</p>}
             </Card>
           ))}
         </div>
 
-        {cityServices.length === 0 && <p className="muted">No city services are published yet.</p>}
+        {publicServices.length === 0 && <p className="muted">No city services are published yet.</p>}
+      </section>
+
+      <section className="stack-block">
+        <h3>Infrastructure</h3>
+        <p className="muted">Roads, water supply and electricity records.</p>
+
+        <div className="city-public-grid">
+          {infrastructure.map((item) => (
+            <Card key={item.id} className="city-public-card">
+              <div className="city-public-head">
+                <h4>{item.name}</h4>
+                <span className={`status ${item.status === "Operational" ? "resolved" : "pending"}`}>
+                  {item.status}
+                </span>
+              </div>
+              <p><strong>Type:</strong> {item.category}</p>
+              <p><strong>Zone:</strong> {item.zone}</p>
+              {item.description && <p><strong>Info:</strong> {item.description}</p>}
+            </Card>
+          ))}
+        </div>
+
+        {infrastructure.length === 0 && <p className="muted">No infrastructure records available.</p>}
+      </section>
+
+      <section className="stack-block">
+        <h3>Amenities</h3>
+        <p className="muted">Parks, malls and libraries maintained by admin.</p>
+
+        <div className="city-public-grid">
+          {amenities.map((item) => (
+            <Card key={item.id} className="city-public-card">
+              <div className="city-public-head">
+                <h4>{item.name}</h4>
+                <span className="status resolved">{item.status}</span>
+              </div>
+              <p><strong>Category:</strong> {item.category}</p>
+              <p><strong>Zone:</strong> {item.zone}</p>
+              <p><strong>Rating:</strong> {item.rating || 0} / 5</p>
+              {item.description && <p><strong>Info:</strong> {item.description}</p>}
+            </Card>
+          ))}
+        </div>
+
+        {amenities.length === 0 && <p className="muted">No amenities records available.</p>}
       </section>
 
       <div className="service-grid">
@@ -129,112 +130,6 @@ const Services = () => {
           <p>Helpline: 1800-555-999</p>
         </Card>
       </div>
-
-      <section className="worker-booking-section">
-        <h3>Book Local Service Worker</h3>
-        <p className="muted">
-          Select a category, choose a verified worker, and book an appointment.
-        </p>
-
-        <Card className="worker-booking-card">
-          <form className="form worker-form" onSubmit={handleBookAppointment}>
-            <div className="worker-form-grid">
-              <div>
-                <label htmlFor="worker-category">Category</label>
-                <select
-                  id="worker-category"
-                  value={selectedCategory}
-                  onChange={handleCategoryChange}
-                  required
-                >
-                  {catalog.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="worker-name">Worker</label>
-                <select
-                  id="worker-name"
-                  value={selectedWorkerId}
-                  onChange={(event) => setSelectedWorkerId(event.target.value)}
-                  required
-                >
-                  {workersInCategory.map((worker) => (
-                    <option key={worker.id} value={worker.id}>
-                      {worker.name} - {worker.role}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label htmlFor="appointment-date">Appointment Date</label>
-                <input
-                  id="appointment-date"
-                  type="date"
-                  value={appointmentDate}
-                  onChange={(event) => setAppointmentDate(event.target.value)}
-                  required
-                />
-              </div>
-
-              <div>
-                <label htmlFor="appointment-time">Appointment Time</label>
-                <input
-                  id="appointment-time"
-                  type="time"
-                  value={appointmentTime}
-                  onChange={(event) => setAppointmentTime(event.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <input
-              type="text"
-              placeholder="Service address (optional)"
-              value={serviceAddress}
-              onChange={(event) => setServiceAddress(event.target.value)}
-            />
-
-            <textarea
-              rows="3"
-              placeholder="Notes for worker (optional)"
-              value={note}
-              onChange={(event) => setNote(event.target.value)}
-            />
-
-            <button type="submit">Book Appointment</button>
-
-            {message && <p className="success">{message}</p>}
-          </form>
-
-          <div className="worker-list">
-            {workersInCategory.map((worker) => (
-              <div
-                key={worker.id}
-                className={`worker-item ${selectedWorkerId === worker.id ? "worker-item-active" : ""
-                  }`}
-              >
-                <div>
-                  <h4>{worker.name}</h4>
-                  <p>{worker.role}</p>
-                  <small>
-                    {worker.experience} | {worker.serviceArea} | Rs.{worker.fee}
-                  </small>
-                </div>
-                <button type="button" onClick={() => setSelectedWorkerId(worker.id)}>
-                  Select
-                </button>
-              </div>
-            ))}
-          </div>
-        </Card>
-      </section>
     </>
   );
 };

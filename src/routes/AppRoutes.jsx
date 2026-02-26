@@ -32,28 +32,37 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/admin/city-management"
+        path="/admin/public-services"
         element={
           <ProtectedRoute role="ADMIN">
-            <AdminPage page="city-management" />
+            <AdminPage page="public-services" />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/admin/citizen-reports"
+        path="/admin/infrastructure"
         element={
           <ProtectedRoute role="ADMIN">
-            <AdminPage page="citizen-reports" />
+            <AdminPage page="infrastructure" />
           </ProtectedRoute>
         }
       />
 
       <Route
-        path="/admin/system-settings"
+        path="/admin/amenities"
         element={
           <ProtectedRoute role="ADMIN">
-            <AdminPage page="system-settings" />
+            <AdminPage page="amenities" />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/issue-reports"
+        element={
+          <ProtectedRoute role="ADMIN">
+            <AdminPage page="issue-reports" />
           </ProtectedRoute>
         }
       />
