@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import './style.css'
+import { useAuth } from '../context/AuthContext'
 
 const CustomerLogin = () => {
   const [formData, setFormData] = useState({ email: '', password: '' })
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const navigate = useNavigate()
+  const { loginAs } = useAuth()
 
   const URL = `${import.meta.env.VITE_API_URL}/customerapi/login`
 
@@ -19,29 +23,23 @@ const CustomerLogin = () => {
     try {
       const response = await axios.post(URL, formData)
 
-      if (response.status === 200) {
-        setMessage('Customer login successful')
+      if (response.status === 200) 
+      {
+        sessionStorage.setItem('loggedInCustomer', JSON.stringify(response.data))
+        loginAs('customer')
         setError('')
+        navigate('/customer/home')
       }
-    } 
-    catch (err) 
-    {
+    } catch (err) {
       setMessage('')
-      if (err.response?.status === 401) 
-      {
+      if (err.response?.status === 401) {
         setError(err.response.data)
-      } 
-      else if (err.response?.status === 500) 
-      {
-        setError("Internal Server Error")
-      } 
-      else if (err.request) 
-      {
-         setError("Network Error - Server not responding")
-      } 
-      else 
-      {
-           setError("Bad Request - Check your input")
+      } else if (err.response?.status === 500) {
+        setError('Internal Server Error')
+      } else if (err.request) {
+        setError('Network Error - Server not responding')
+      } else {
+        setError('Bad Request - Check your input')
       }
     }
   }

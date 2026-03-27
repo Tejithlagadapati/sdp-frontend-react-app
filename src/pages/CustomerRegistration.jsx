@@ -34,6 +34,15 @@ const CustomerRegistration = () => {
       {
         setMessage(response.data)
         setError('')
+        setFormData({
+          name: '',
+          gender: '',
+          email: '',
+          username: '',
+          password: '',
+          contact: '',
+          location: ''
+        })
       }
     }
     catch (err)
@@ -95,7 +104,7 @@ const CustomerRegistration = () => {
               <option value="">Select gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-              <option value="Other">Other</option>
+              <option value="Others">Others</option>
             </select>
           </div>
 

@@ -1,52 +1,44 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import './style.css'
+import { useAuth } from '../context/AuthContext'
 
-const AdminLogin = () => 
-{
+const AdminLogin = () => {
   const [formData, setFormData] = useState({ username: '', password: '' })
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
+  const navigate = useNavigate()
+  const { loginAs } = useAuth()
 
   const URL = `${import.meta.env.VITE_API_URL}/adminapi/login`
 
-  const handleChange = (e) => 
-  {
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = async (e) => 
-  {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
-    try 
-    {
+    try {
       const response = await axios.post(URL, formData)
 
-      if (response.status === 200) 
-      {
-        setMessage('Admin login successful')
+      if (response.status === 200) {
+        sessionStorage.setItem('loggedInAdmin', JSON.stringify(response.data))
+        loginAs('admin')
         setError('')
+        navigate('/admin/home')
       }
-    } 
-    catch (err) 
-    {
+    } catch (err) {
       setMessage('')
-      if (err.response?.status === 401) 
-      {
+      if (err.response?.status === 401) {
         setError(err.response.data)
-      } 
-      else if (err.response?.status === 500) 
-      {
-        setError("Internal Server Error")
-      } 
-      else if (err.request) 
-      {
-         setError("Network Error - Server not responding")
-      } 
-      else 
-      {
-           setError("Bad Request - Check your input")
+      } else if (err.response?.status === 500) {
+        setError('Internal Server Error')
+      } else if (err.request) {
+        setError('Network Error - Server not responding')
+      } else {
+        setError('Bad Request - Check your input')
       }
     }
   }

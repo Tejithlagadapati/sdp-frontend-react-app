@@ -6,6 +6,7 @@ import CustomerRegistration from './CustomerRegistration'
 import CustomerLogin from './CustomerLogin'
 import ServiceManagerLogin from './ServiceManagerLogin'
 import AdminLogin from './AdminLogin'
+import PageNotFound from './PageNotFound'
 
 const MainNavBar = () => {
   return (
@@ -36,6 +37,7 @@ const MainNavBar = () => {
         <Route path="/customerlogin" element={<CustomerLogin />} />
         <Route path="/servicemanagerlogin" element={<ServiceManagerLogin />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
   )
