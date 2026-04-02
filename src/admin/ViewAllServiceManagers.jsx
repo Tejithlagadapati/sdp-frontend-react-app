@@ -4,7 +4,6 @@ import axios from 'axios'
 const ViewAllServiceManagers = () => {
 	const [managers, setManagers] = useState([])
 	const [loading, setLoading] = useState(true)
-	const [deletingId, setDeletingId] = useState(null)
 	const [error, setError] = useState('')
 	const [message, setMessage] = useState('')
 
@@ -29,11 +28,10 @@ const ViewAllServiceManagers = () => {
 	}, [])
 
 	const handleDelete = async (id) => {
-		const confirmed = window.confirm('Delete this service manager?')
+		const confirmed = window.confirm('Do You Want To Delete this service manager?')
 		if (!confirmed) return
 
 		try {
-			setDeletingId(id)
 			const response = await axios.delete(`${DELETE_URL}/${id}`)
 			setMessage(response.data)
 			setError('')
@@ -42,12 +40,10 @@ const ViewAllServiceManagers = () => {
 			if (err.response?.status === 404) {
 				setError('Service manager not found')
 			} else {
-				setError('Failed to delete service manager')
+				setError(err.response.data)
 			}
 			setMessage('')
-		} finally {
-			setDeletingId(null)
-		}
+		} 
 	}
 
 	return (
