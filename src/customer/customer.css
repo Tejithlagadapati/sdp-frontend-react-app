@@ -93,6 +93,11 @@
 	padding: 24px;
 }
 
+.customer-bookings-section {
+	max-width: 1200px;
+	width: 100%;
+}
+
 .customer-section-card h2 {
 	margin-top: 0;
 	margin-bottom: 10px;
@@ -103,6 +108,205 @@
 	margin: 0;
 	color: #3b5d4a;
 	line-height: 1.5;
+}
+
+.customer-success-msg {
+	margin: 0 0 14px;
+	padding: 10px 12px;
+	border-radius: 8px;
+	background: #dcfce7;
+	color: #166534;
+	font-weight: 600;
+}
+
+.customer-error-msg {
+	margin: 0 0 14px;
+	padding: 10px 12px;
+	border-radius: 8px;
+	background: #fee2e2;
+	color: #991b1b;
+	font-weight: 600;
+}
+
+.customer-form-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+}
+
+.customer-form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.customer-form-group label {
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: #0f3b27;
+}
+
+.customer-form-group input,
+.customer-form-group select,
+.customer-form-group textarea {
+	padding: 10px 12px;
+	border: 1px solid #cfe9da;
+	border-radius: 8px;
+	font: inherit;
+	color: #173b2a;
+	background: #fff;
+	outline: none;
+}
+
+.customer-form-group input:focus,
+.customer-form-group select:focus,
+.customer-form-group textarea:focus {
+	border-color: #198754;
+	box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.15);
+}
+
+.customer-form-group textarea {
+	min-height: 110px;
+	resize: vertical;
+}
+
+.customer-form-group-full {
+	grid-column: 1 / -1;
+}
+
+.customer-primary-btn {
+	grid-column: 1 / -1;
+	justify-self: start;
+	padding: 10px 16px;
+	border: none;
+	border-radius: 8px;
+	background: #166534;
+	color: #fff;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.customer-primary-btn:hover:not(:disabled) {
+	background: #14532d;
+}
+
+.customer-primary-btn:disabled {
+	opacity: 0.7;
+	cursor: not-allowed;
+}
+
+.customer-table-wrap {
+	overflow-x: auto;
+	margin-top: 12px;
+}
+
+.customer-table {
+	width: 100%;
+	border-collapse: collapse;
+	table-layout: auto;
+	background: #fff;
+}
+
+.customer-table th,
+.customer-table td {
+	border: 1px solid #dcefe4;
+	padding: 12px;
+	text-align: left;
+	font-size: 0.9rem;
+	vertical-align: top;
+	white-space: normal;
+	word-break: break-word;
+}
+
+.customer-table th {
+	background: #ecfdf5;
+	color: #14532d;
+	font-weight: 700;
+}
+
+.customer-cell-description {
+	min-width: 0;
+	word-break: break-word;
+}
+
+.customer-cell-price {
+	font-variant-numeric: tabular-nums;
+}
+
+.customer-status-chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px 9px;
+	border-radius: 999px;
+	background: #dcfce7;
+	color: #166534;
+	font-weight: 700;
+	font-size: 0.78rem;
+	white-space: nowrap;
+}
+
+.customer-table-wrap.no-horizontal-scroll {
+	overflow-x: hidden;
+}
+
+.customer-services-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 14px;
+	margin-top: 12px;
+	margin-bottom: 14px;
+}
+
+.customer-service-card {
+	border: 1px solid #dcefe4;
+	border-radius: 12px;
+	padding: 14px;
+	background: #fcfffd;
+	box-shadow: 0 2px 10px rgba(20, 58, 40, 0.06);
+}
+
+.customer-service-card h3 {
+	margin: 0 0 8px;
+	color: #0f3b27;
+}
+
+.customer-service-card p {
+	margin: 0 0 8px;
+}
+
+.customer-selected-service {
+	margin: 12px 0 16px;
+	padding: 12px;
+	border-radius: 10px;
+	border: 1px solid #bbf7d0;
+	background: #f0fdf4;
+}
+
+.customer-selected-service h3 {
+	margin: 0 0 8px;
+	color: #14532d;
+}
+
+.customer-selected-service p {
+	margin: 0 0 8px;
+}
+
+.customer-secondary-btn {
+	padding: 8px 14px;
+	border: 1px solid #166534;
+	border-radius: 8px;
+	background: #fff;
+	color: #166534;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color 0.2s, color 0.2s;
+}
+
+.customer-secondary-btn:hover {
+	background: #166534;
+	color: #fff;
 }
 
 @media (max-width: 760px) {
@@ -130,5 +334,13 @@
 
 	.customer-section-card {
 		padding: 18px;
+	}
+
+	.customer-form-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.customer-services-grid {
+		grid-template-columns: 1fr;
 	}
 }

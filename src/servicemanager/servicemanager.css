@@ -93,6 +93,11 @@
 	padding: 24px;
 }
 
+.sm-bookings-card {
+	max-width: 1180px;
+	width: 100%;
+}
+
 .sm-section-card h2 {
 	margin: 0 0 10px;
 	color: #2e1065;
@@ -173,28 +178,41 @@
 }
 
 .sm-table-wrap {
-	overflow-x: auto;
+	overflow-x: hidden;
 	margin-top: 14px;
+	border: 1px solid #ece6fb;
+	border-radius: 12px;
 }
 
 .sm-table {
 	width: 100%;
-	min-width: 760px;
+	table-layout: auto;
 	border-collapse: collapse;
 }
 
 .sm-table th,
 .sm-table td {
-	padding: 10px 12px;
+	padding: 12px 10px;
 	border-bottom: 1px solid #ece6fb;
 	text-align: center;
 	font-size: 0.9rem;
+	word-break: break-word;
+	white-space: normal;
 }
 
 .sm-table th {
-	background: #f7f3ff;
+	background: #f4f0ff;
 	color: #3f2b63;
 	font-weight: 700;
+	white-space: nowrap;
+}
+
+.sm-table tbody tr:nth-child(odd) {
+	background: #fcfaff;
+}
+
+.sm-table tbody tr:hover {
+	background: #f6f2ff;
 }
 
 .sm-danger-btn {
@@ -215,6 +233,91 @@
 
 .sm-danger-btn:disabled {
 	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.sm-inline-actions {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	justify-content: center;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.sm-status-select {
+	width: 120px;
+	padding: 6px 8px;
+	border: 1px solid #d4c8f2;
+	border-radius: 8px;
+	font-size: 0.85rem;
+	outline: none;
+	background: #fff;
+}
+
+.sm-finalprice-input {
+	width: 100px;
+	padding: 6px 8px;
+	border: 1px solid #d4c8f2;
+	border-radius: 8px;
+	font-size: 0.85rem;
+	outline: none;
+	text-align: right;
+}
+
+.sm-finalprice-input:focus {
+	border-color: #6d28d9;
+	box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+}
+
+.sm-status-select:focus {
+	border-color: #6d28d9;
+	box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.15);
+}
+
+.sm-action-btn {
+	padding: 6px 8px;
+	border: 1px solid #5b21b6;
+	border-radius: 8px;
+	background: #5b21b6;
+	color: #fff;
+	font-weight: 700;
+	font-size: 0.85rem;
+	cursor: pointer;
+	transition: background-color 0.2s, border-color 0.2s;
+}
+
+.sm-cell-compact {
+	white-space: nowrap;
+}
+
+.sm-cell-time {
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.sm-status-chip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: #ede9fe;
+	color: #4c1d95;
+	font-weight: 700;
+	font-size: 0.8rem;
+	white-space: nowrap;
+}
+
+.sm-action-btn:hover {
+	background: #4c1d95;
+	border-color: #4c1d95;
+}
+
+.sm-action-btn:disabled,
+.sm-status-select:disabled,
+.sm-finalprice-input:disabled {
+	opacity: 0.65;
 	cursor: not-allowed;
 }
 
@@ -251,7 +354,16 @@
 
 	.sm-table th,
 	.sm-table td {
-		font-size: 0.82rem;
-		padding: 8px 10px;
+		font-size: 0.8rem;
+		padding: 8px 6px;
+	}
+
+	.sm-inline-actions {
+		flex-direction: column;
+	}
+
+	.sm-status-select,
+	.sm-finalprice-input {
+		width: 92px;
 	}
 }

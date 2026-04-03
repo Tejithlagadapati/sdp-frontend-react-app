@@ -168,6 +168,56 @@
 	color: #166534;
 }
 
+.admin-toast {
+	position: fixed;
+	top: 18px;
+	right: 18px;
+	padding: 10px 14px;
+	padding-bottom: 14px;
+	border-radius: 10px;
+	background: #ffffff;
+	border: 1px solid #d1d5db;
+	color: #111827;
+	font-weight: 700;
+	box-shadow: 0 8px 20px rgba(17, 24, 39, 0.14);
+	z-index: 1200;
+	overflow: hidden;
+	animation: adminToastSlideIn 0.22s ease;
+}
+.admin-toast::after {
+	content: '';
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	height: 4px;
+	width: 100%;
+	animation: adminToastProgress 3s linear forwards;
+}
+
+.admin-toast::after {
+	background: #22c55e;
+}
+
+@keyframes adminToastSlideIn {
+	from {
+		opacity: 0;
+		transform: translateY(-8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes adminToastProgress {
+	from {
+		width: 100%;
+	}
+	to {
+		width: 0;
+	}
+}
+
 .admin-error {
 	color: #b91c1c;
 }
@@ -289,5 +339,12 @@
 	.admin-danger-btn {
 		font-size: 0.78rem;
 		padding: 6px 8px;
+	}
+
+	.admin-toast {
+		top: 12px;
+		right: 12px;
+		font-size: 0.85rem;
+		padding: 8px 12px;
 	}
 }

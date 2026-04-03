@@ -6,6 +6,8 @@ import CustomerRegistration from './CustomerRegistration'
 import CustomerLogin from './CustomerLogin'
 import ServiceManagerLogin from './ServiceManagerLogin'
 import AdminLogin from './AdminLogin'
+import Login from './Login'
+import Contact from 'src/api/Contact'
 import PageNotFound from './PageNotFound'
 
 const MainNavBar = () => {
@@ -14,29 +16,19 @@ const MainNavBar = () => {
       <nav className="navbar">
         <div className="navbar-brand">Service Management System</div>
         <ul className="navbar-links">
+
           <li><Link to="/">Home</Link></li>
-
-          {/* Customer Dropdown */}
-          <li className="nav-dropdown">
-            <span className="nav-dropdown-label">Customer ▾</span>
-            <ul className="dropdown-menu">
-              <li><Link to="/customerregistration">Registration</Link></li>
-              <li><Link to="/customerlogin">Login</Link></li>
-            </ul>
-          </li>
-
-          
-          <li><Link to="/servicemanagerlogin">Service Manager Login</Link></li>
-          <li><Link to="/adminlogin">Admin Login</Link></li>
+          <li><Link to="/customerregistration">Customer Registration</Link></li>
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/contact">Contact</Link></li>
           
         </ul>
       </nav>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/customerregistration" element={<CustomerRegistration />} />
-        <Route path="/customerlogin" element={<CustomerLogin />} />
-        <Route path="/servicemanagerlogin" element={<ServiceManagerLogin />} />
-        <Route path="/adminlogin" element={<AdminLogin />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/login" element={<Login/>} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
     </>
