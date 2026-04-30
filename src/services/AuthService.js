@@ -1,6 +1,6 @@
 import { clearAuthStorage } from "./authUtils";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:2026";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://fsad-sdp-backend-citizen-x2ui.onrender.com";
 
 const parseResponseBody = async (response) => {
   const contentType = response.headers.get("content-type") || "";

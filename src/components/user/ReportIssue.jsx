@@ -33,7 +33,7 @@ const ReportIssue = () => {
 
     setSubmitting(true);
     try {
-      const res = await fetch("http://localhost:2026/issuesapi", {
+      const res = await fetch("https://fsad-sdp-backend-citizen-x2ui.onrender.com/issuesapi", {
         method: "POST",
         body: formData,
       });

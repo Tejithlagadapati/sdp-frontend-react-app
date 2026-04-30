@@ -7,12 +7,12 @@ export default defineConfig({
   server: {
     proxy: {
       '/userapi': {
-        target: 'http://localhost:2026',
+        target: 'https://fsad-sdp-backend-citizen-x2ui.onrender.com',
         changeOrigin: true,
         secure: false,
       },
       '/adminapi': {
-        target: 'http://localhost:2026',
+        target: 'https://fsad-sdp-backend-citizen-x2ui.onrender.com',
         changeOrigin: true,
         secure: false,
       },
